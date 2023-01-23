@@ -9,7 +9,17 @@ app.config['SECRET_KEY'] = '1234'
 def home():
     return render_template('index.html')
 
+@app.route("/account", methods=['GET','POST'])
+def account():
+    return render_template('account.html')
 
+@app.route("/registration", methods=['GET','POST'])
+def registration():
+    return render_template('registration.html')
+
+@app.route("/login", methods=['GET','POST'])
+def login():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
