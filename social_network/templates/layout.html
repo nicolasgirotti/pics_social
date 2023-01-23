@@ -27,18 +27,30 @@
     <div class="bg-dark p-4">
       <h5 class="text-white h4">Red social</h5>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('registration') }}">Registro</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">Inicio de sesion</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('account') }}">Mi cuenta</a>
-        </li>
+
+        <!-- Barra de navegacion para usuario autenticado -->
+
+        {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('account') }}">Mi cuenta</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Cerrar sesion</a>
+            </li>
+        {% else %}
+
+        <!-- Barra de navegacion para usuario no autenticado -->
+        
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('registration') }}">Registrarse</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">Inicio de sesion</a>
+            </li>
+        {% endif %}
       </ul>
     </div>
     
