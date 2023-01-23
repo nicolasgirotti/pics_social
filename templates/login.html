@@ -2,5 +2,37 @@
 
 {% block content %}
 
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <form method="POST" action="{{ url_for('login') }}" autocomplete="off" >
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group mt-3">
+                    <legend class="border-bottom mb-4">
+                        Inicia sesion en la Red social
+                    </legend>
+                    
+                    <div class="form-group">
+                        {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
+                    </div>
+                </fieldset>
+
+                <div class="form-group mt-3">
+                    {{ form.submit (class="btn btn-outline-info")}}
+                </div>
+            </form>
+        </div>
+        <div class="pt-3">
+            <a class="btn btn-outline-danger ml-2" href="{{ url_for('registration') }}">Registrarse</a>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock content %}
 
