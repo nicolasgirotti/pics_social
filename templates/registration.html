@@ -12,18 +12,67 @@
                     <legend class="border-bottom mb-4">
                         Registrate en la Red social
                     </legend>
+
+                    <!--  Registration form  -->
+
                     <div class="form-group">
-                        {{ form.username (class="form-control-lg", placeholder='Nombre de usuario', autocomplete='off') }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username (class="form-control form-control-lg", placeholder='Nombre de usuario', autocomplete='off') }}
+                        {% endif %}
                     </div>
+
+                    <!--  Email  -->
+
                     <div class="form-group">
-                        {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email (class="form-control form-control-lg", placeholder='Email', autocomplete='off') }}
+                        {% endif %}
                     </div>
+
+                    <!--  Contraseña  -->
                     <div class="form-group">
-                        {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password (class="form-control form-control-lg", placeholder='Password', autocomplete='off') }}
+                        {% endif %}
                     </div>
+                        
+
+                    <!-- Confirmar contraseña   -->
                     <div class="form-group">
-                        {{ form.confirm_password (class="form-control-lg", placeholder='Confirmar contraseña', autocomplete='off')}}
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password (class="form-control form-control-lg", placeholder='Confirmar contraseña', autocomplete='off') }}
+                        {% endif %}
+
                     </div>
+                    
                 </fieldset>
 
                 <div class="form-group mt-3">
