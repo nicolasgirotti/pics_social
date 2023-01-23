@@ -6,22 +6,26 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'a8a54e926a2b165d16413935e650936f'
 
+
+
 @app.route("/", methods=['GET','POST'])
 def home():
-    return render_template('index.html')
+    return render_template('index.html', title='Red social')
 
 @app.route("/account", methods=['GET','POST'])
 def account():
-    return render_template('account.html')
+    return render_template('account.html', title='Mi cuenta')
 
 @app.route("/registration", methods=['GET','POST'])
 def registration():
     form = RegistrationForm()
-    return render_template('registration.html', form=form)
+    return render_template('registration.html', title='Registro de usuarios',form=form)
 
 @app.route("/login", methods=['GET','POST'])
 def login():
-    return render_template('login.html')
+    return render_template('login.html', title='Iniciar sesion')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

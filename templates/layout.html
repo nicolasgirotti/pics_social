@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ title }}</title>
 
     <link href="../static/style.css" rel="stylesheet" type="text/css">
 
@@ -20,6 +20,38 @@
     <script src="https://kit.fontawesome.com/26c5d45d54.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+  <!-- Nav bar -->
+
+  <div class="collapse" id="navbarToggleExternalContent">
+    <div class="bg-dark p-4">
+      <h5 class="text-white h4">Red social</h5>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('registration') }}">Registro</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">Inicio de sesion</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('account') }}">Mi cuenta</a>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+    </div>
+  </nav>
+
 
     {% block content %}
     
