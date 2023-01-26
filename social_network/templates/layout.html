@@ -19,8 +19,8 @@
     <link href="../static/style.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/26c5d45d54.js" crossorigin="anonymous"></script>
 </head>
-<body>
-
+<body class='background'>
+  
   <!-- Nav bar -->
 
   <div class="collapse" id="navbarToggleExternalContent">
@@ -40,6 +40,9 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Cerrar sesion</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('new_post') }}">Publicar</a>
+            </li>
         {% else %}
 
         <!-- Barra de navegacion para usuario no autenticado -->
@@ -58,9 +61,9 @@
   <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
+        <span class="navbar-toggler-icon">
+        </span>
+      </button>      
     </div>
   </nav>
 
@@ -73,6 +76,8 @@
         {% endfor %}
     {% endif %}
   {% endwith %}
+
+    
 
     {% block content %}
     

@@ -1,16 +1,21 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
 from flask_login import login_user, logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
+from os import remove
 from social_network import app, db, bcrypt
-from social_network.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from social_network.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewPost
 from social_network.models import User, Post
-import os, secrets
+import os, secrets, uuid
 
+
+app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
 
 @app.route("/", methods=['GET','POST'])
 def home():
-    return render_template('index.html', title='Red social')
-
+    page = request.args.get('page', 1, type=int)
+    posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    return render_template('index.html', title='Red social', posts=posts)
 
 
 def save_picture(form_picture):
@@ -25,6 +30,9 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+
+
 
 @app.route("/account", methods=['GET','POST'])
 @login_required
@@ -80,8 +88,60 @@ def login():
     return render_template('login.html', title='Iniciar sesion', form=form)
 
 
-
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+
+# Rutas para publicaciones
+def save_photo(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/UPLOAD_FOLDER', picture_fn)
+    output_size = (350, 350)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    
+    return picture_fn
+
+
+
+
+
+@app.route("/post", methods=['GET', 'POST'])
+@login_required
+def new_post():
+    
+    form = NewPost()
+    if form.validate_on_submit():
+        image = form.photo.data
+        image_path = save_photo(image)
+        # Intentar modificar el path de la imagen con la funcion creada para guardar foto de perfil.
+        post = Post(content=form.content.data, image=image_path, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Publicacion creada con exito', 'success')
+        return redirect(url_for('home'))
+    return render_template('new_post.html', title='Nueva publicacion',form=form)
+
+
+
+@app.route("/post/<int:post_id>/delete", methods=['GET','POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if current_user.id != post.user_id:
+        abort(404)
+    db.session.delete(post)
+    db.session.commit()
+    if post.image:
+        remove(app.root_path + '/static/UPLOAD_FOLDER/'+ post.image)
+    
+    return redirect(url_for('home'))
+
+
+

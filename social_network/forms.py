@@ -1,21 +1,18 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf.file import FileAllowed
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from social_network.models import User
 
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Nombre de usuario', 
-                           validators=[DataRequired(), Length(min=2, max=20)])
+    username = StringField('Nombre de usuario',validators=[DataRequired(), Length(min=2, max=20)])
     
-    email = StringField('Email', 
-                           validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     
-    password = PasswordField('Contraseña', 
-                             validators=[DataRequired()])
+    password = PasswordField('Contraseña', validators=[DataRequired()])
         
     """
     Agregar al campo password expresion regular
@@ -26,8 +23,7 @@ class RegistrationForm(FlaskForm):
             message='La contraseña debe tener al menos 6 caracteres y contener al menos una letra mayúscula, una minúscula, un símbolo y un número'
         )])
     """
-    confirm_password = PasswordField('Confirmar contraseña',
-                                     validators=[DataRequired(), EqualTo('password')])
+    confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password')])
     
     submit = SubmitField('Registrarse')
     
@@ -49,11 +45,9 @@ class RegistrationForm(FlaskForm):
     
 class LoginForm(FlaskForm):
     
-    email = StringField('Email', 
-                        validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     
-    password = PasswordField('Contraseña', 
-                            validators=[DataRequired()])
+    password = PasswordField('Contraseña', validators=[DataRequired()])
     
     remember = BooleanField('Recordarme')
     
@@ -62,10 +56,8 @@ class LoginForm(FlaskForm):
     
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Nombre de usuario',
-                           validators=[Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[Email()])
+    username = StringField('Nombre de usuario',validators=[Length(min=2, max=20)])
+    email = StringField('Email',validators=[Email()])
     picture = FileField('Seleccionar foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar')
 
@@ -80,3 +72,11 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('El email ya ha sido registrado, use otro por favor.')
+            
+
+class NewPost(FlaskForm):
+    content = TextAreaField('Contenido', validators=[DataRequired(), Length(min=1, max=144)])
+    photo = FileField('Imagen', validators=[DataRequired(),FileAllowed(['jpg', 'png'], 'Solo formato jpg o png')])
+    submit = SubmitField('Publicar')
+    
+

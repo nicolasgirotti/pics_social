@@ -24,15 +24,18 @@ class User(db.Model, UserMixin):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
-    content = db.Column(db.Text(144), nullable=False)
+    content = db.Column(db.String(144), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    image = db.Column(db.String(36))
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     
     def __repr__(self):
-        return f'Publicacion {self.title}, {self.date_posted}'
+        return f'Publicacion {self.content}'
     
-    
+
+
+
+
 # Creacion de tablas en base de datos
 
 db.init_app(app)

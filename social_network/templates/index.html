@@ -3,7 +3,51 @@
 
 {% block content %}
 
-<h1> Aplicacion web   </h1>
+
+<!-- Formulario para crear publicacion   -->
+
+<!--  Publicaciones  (.items ya que es una paginacion)-->
+
+{% for post in posts.items %}
+
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-6">           
+                    <div class="polaroid">
+                        {% if post.image %}
+                            <img class="" src="{{ url_for('static', filename='UPLOAD_FOLDER/' + post.image)   }}" alt="">
+                        {% endif %}
+                        <div>
+                            {% if current_user.id == post.user_id  %}
+                                <a class="btn-sm btn-warning" href="{{ url_for('delete_post', post_id=post.id)}}">Eliminar</a>
+                            {% endif %}
+                        </div>
+                        <div class="mb-2">
+                            {{ post.author.username }}
+                        </div>
+                        <p>
+                            {{ post.content }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+
+<button class="bounce-button text-center">
+    <i class="fa-sharp fa-solid fa-arrow-right"></i>
+</button>
+
+<!-- Boton para publicar   -->
+
+<form method="POST" action="{{ url_for('new_post') }}">      
+      <div class="text-center">
+        <button type="submit" class="post-button btn-shadow" id="button2" href="{{ url_for('new_post') }}">Publicar
+        </button>
+      </div>     
+  </form>
+
+
 
 {% endblock content %}
 

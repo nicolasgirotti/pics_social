@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Formulario   -->
+
+            <form method='POST' action="{{ url_for('new_post') }}" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.content(class="form-group", placeholder='¿Que estas pensando?..') }}
+                </div>
+                <div class="form-group">
+                    {{ form.photo }}
+                </div>
+               
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-warning") }}
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+

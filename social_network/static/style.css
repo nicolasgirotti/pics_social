@@ -7,3 +7,83 @@ h1 {
 }
 
 
+.post-button {
+    display: inline-block;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1DA1F2; /* Twitter blue */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .post-button:hover {
+    background-color: #0d95e8; /* Twitter dark blue */
+
+  }
+
+  .btn-shadow{
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    transform: perspective(5px);
+    transition: all 0.3s ease-in-out;
+  }
+  
+
+img{
+  background-size: cover;
+}
+
+
+.polaroid {
+  margin: auto;
+  width: 300px;
+  box-shadow: 10px 10px 5px #aaaaaa;
+  border: 1px solid #cccccc;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.polaroid img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.polaroid:hover {
+  transform: scale(1.1);
+}
+
+
+
+.bounce-button{
+  border-radius: 50%;
+  border: none;
+  background-color: #3498db; /* color de fondo */
+  color: #ffffff; /* color de la letra */
+  padding: 10px 20px; /* espaciado */
+  font-size: 20px; /* tamaño de letra*/
+}
+
+/* Animación de rebote */
+.bounce-button {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
