@@ -2,16 +2,19 @@ from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
+from flask_mail import Message
 from os import remove
-from social_network import app, db, bcrypt
+from social_network import app, db, bcrypt, mail
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
                                   NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
 import os, secrets, uuid
 
 
+# Carpeta donde se guardan las fotos de las publicaciones 
 app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
 
+# Ruta de inicio
 @app.route("/", methods=['GET','POST'])
 def home():
     # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
@@ -20,12 +23,12 @@ def home():
     return render_template('index.html', title='Red social', posts=posts)
 
 
+# Funcion para guardar la foto de perfil en la cuenta del usuario
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
     output_size = (300, 300)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
@@ -35,7 +38,7 @@ def save_picture(form_picture):
 
 
 
-
+# Ruta de cuenta de usuario
 @app.route("/account", methods=['GET','POST'])
 @login_required
 def account():
@@ -56,6 +59,9 @@ def account():
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
 
+
+
+# Ruta de registro de usuarios
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
     if current_user.is_authenticated:
@@ -73,6 +79,7 @@ def registration():
 
 
 
+# Ruta inicio de sesion
 @app.route("/login", methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
@@ -90,6 +97,7 @@ def login():
     return render_template('login.html', title='Iniciar sesion', form=form)
 
 
+# Cerrar sesion
 @app.route("/logout")
 def logout():
     logout_user()
@@ -97,7 +105,7 @@ def logout():
 
 
 
-# Rutas para publicaciones
+# Rutas para guardar fotos de publicaciones en carpeta
 def save_photo(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -113,7 +121,7 @@ def save_photo(form_picture):
 
 
 
-
+# Ruta para crear publicaciones
 @app.route("/post", methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -131,7 +139,7 @@ def new_post():
     return render_template('new_post.html', title='Nueva publicacion',form=form)
 
 
-
+# Ruta para eliminar publicacion
 @app.route("/post/<int:post_id>/delete", methods=['GET','POST'])
 @login_required
 def delete_post(post_id):
@@ -146,23 +154,49 @@ def delete_post(post_id):
     return redirect(url_for('home'))
 
 
-def send_email():
-    pass
+# Funcion para enviar mail de reestablecimiento de contraseña
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Solicitud de reestablecimiento de contraseña', 
+                  sender='readyplayer.parziv@gmail.com', 
+                  recipients=[user.email])
+    msg.body = f'''Para reestablecer tu contraseña, visita el siguiente link: 
+{url_for('reset_password', token=token, _external=True)}
+
+Si usted no realizo esta solicitud, simplemente ignore este email y no habra cambios en su cuenta.
+
+'''
+    mail.send(msg)
 
 
+# Ruta para solicitar reestablecimiento de contraseña
 @app.route("/reset_request", methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = ResetRequest()
     if form.validate_on_submit():
-        send_email(form.email.data)
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('Se ha enviado un correo con instrucciones para reestablecer su contraseña', 'info')
+        return redirect(url_for('login'))
     return render_template('reset_request.html', title='Solicitar cambio de contraseña',form=form)
 
 
+# Ruta para reestablecer una nueva contraseña
 @app.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('home'))
+    user = User.verify_token(token)
+    if user is None:
+        flash('El tocken es invalido o el token ha expirado')
+        return redirect(url_for('reset_request'))
     form = ResetPassword()
-    return render_template('reset_password.html', title='Reestablecer contraseña',form=form)
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        user.password = hashed_password
+        db.session.commit()
+        return redirect(url_for('login'))
+        
+    return render_template('reset_password.html', title='Reestablecer contraseña',form=form, token=token)

@@ -34,9 +34,9 @@
         </div>
 {% endfor %}
 
-<!--BUCLE FOR PARA RECORRER PAGINAS-->
+<!-- BUCLE FOR PARA RECORRER PAGINAS-->
 {%  for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1,right_current=2) %}
-<!--CREAMOS ENLACES A ESTAS PAGINAS-->
+<!-- CREAMOS ENLACES A ESTAS PAGINAS-->
     {%  if page_num  %}
         <!--condicional adicional para darle estilo al link de la pagina actual-->
         {%  if posts.page == page_num  %}
@@ -49,6 +49,7 @@
     ...
     {%  endif %}
 {%  endfor %}
+
 <!-- Boton para publicar   -->
 
 <form method="POST" action="{{ url_for('new_post') }}">      
@@ -56,7 +57,7 @@
         <button type="submit" class="post-button btn-shadow" id="button2" href="{{ url_for('new_post') }}">Publicar
         </button>
       </div>     
-  </form>
+</form>
 
 
 

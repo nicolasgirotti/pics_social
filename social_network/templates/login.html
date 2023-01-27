@@ -12,19 +12,21 @@
                     <legend class="border-bottom mb-4">
                         Inicia sesion en la Red social
                     </legend>
-                    
+                    <!-- Email   -->
                     <div class="form-group">
                         {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
                     </div>
+                    <!-- Password   -->
                     <div class="form-group">
                         {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
                     </div>
+                    <!-- Remember  -->
                     <div class="form-group">
                         {{ form.remember(class="form-check-input") }}
                         {{ form.remember.label(class="form-check-label") }}
                     </div>
                 </fieldset>
-
+                <!--  Submit  -->
                 <div class="form-group mt-3">
                     {{ form.submit (class="btn btn-outline-info")}}
                 </div>

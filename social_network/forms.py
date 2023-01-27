@@ -6,12 +6,11 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from social_network.models import User
 
 
-
+# Formularios relacionados al User
 class RegistrationForm(FlaskForm):
+    
     username = StringField('Nombre de usuario',validators=[DataRequired(), Length(min=2, max=20)])
-    
     email = StringField('Email', validators=[DataRequired(), Email()])
-    
     password = PasswordField('Contraseña', validators=[DataRequired()])
         
     """
@@ -24,20 +23,19 @@ class RegistrationForm(FlaskForm):
         )])
     """
     confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password')])
-    
     submit = SubmitField('Registrarse')
+    
     
     # Verificacion para que el usuario sea unico
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
-        
         if user:
             raise ValidationError('Ese usuario ya existe, elige otro por favor.')
+    
     
     # Verificacion de que el email no exista en la base de datos
     def validate_email(self, email):
         email = User.query.filter_by(email=email.data).first()
-        
         if email:
             raise ValidationError('Ese email ya se encuentra registrado, elige otro por favor.')
     
@@ -46,16 +44,13 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     
     email = StringField('Email', validators=[DataRequired(), Email()])
-    
     password = PasswordField('Contraseña', validators=[DataRequired()])
-    
     remember = BooleanField('Recordarme')
-    
     submit = SubmitField('Iniciar sesion')
-    
     
 
 class UpdateAccountForm(FlaskForm):
+    
     username = StringField('Nombre de usuario',validators=[Length(min=2, max=20)])
     email = StringField('Email',validators=[Email()])
     picture = FileField('Foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
@@ -74,28 +69,23 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('El email ya ha sido registrado, use otro por favor.')
             
 
-class NewPost(FlaskForm):
-    content = TextAreaField('Contenido', validators=[DataRequired(), Length(min=1, max=144)])
-    photo = FileField('Imagen', validators=[DataRequired(),FileAllowed(['jpg', 'png'], 'Solo formato jpg o png')])
-    submit = SubmitField('Publicar')
-    
-    
-    
+# Formularios para reestablecer contraseña
 class ResetRequest(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
     submit = SubmitField('Solicitar cambio de contraseña')
 
 
-
 class ResetPassword(FlaskForm):
     password = PasswordField('Contraseña', validators=[DataRequired()])
-    
     confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password')])
-    
     submit = SubmitField('Reestablecer contraseña')
+  
     
-                       
-    
+#Formulario para crear publicacion                       
+class NewPost(FlaskForm):
+    content = TextAreaField('Contenido', validators=[DataRequired(), Length(min=1, max=144)])
+    photo = FileField('Imagen', validators=[DataRequired(),FileAllowed(['jpg', 'png'], 'Solo formato jpg o png')])
+    submit = SubmitField('Publicar')
     
     
     

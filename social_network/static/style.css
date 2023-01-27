@@ -1,6 +1,3 @@
-h1 {
-    color:rebeccapurple;
-}
 
 .form-group{
     margin-top: 1.5em;
@@ -12,7 +9,7 @@ h1 {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #1DA1F2; /* Twitter blue */
+    background-color: #1DA1F2; 
     color: white;
     padding: 10px 15px;
     border-radius: 25px;
@@ -24,7 +21,7 @@ h1 {
   }
   
   .post-button:hover {
-    background-color: #0d95e8; /* Twitter dark blue */
+    background-color: #0d95e8; 
 
   }
 
@@ -66,10 +63,10 @@ img{
 .bounce-button{
   border-radius: 50%;
   border: none;
-  background-color: #3498db; /* color de fondo */
-  color: #ffffff; /* color de la letra */
-  padding: 10px 20px; /* espaciado */
-  font-size: 20px; /* tamaño de letra*/
+  background-color: #3498db; 
+  color: #ffffff; 
+  padding: 10px 20px;
+  font-size: 20px; 
 }
 
 /* Animación de rebote */
