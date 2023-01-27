@@ -34,10 +34,21 @@
         </div>
 {% endfor %}
 
-<button class="bounce-button text-center">
-    <i class="fa-sharp fa-solid fa-arrow-right"></i>
-</button>
-
+<!--BUCLE FOR PARA RECORRER PAGINAS-->
+{%  for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1,right_current=2) %}
+<!--CREAMOS ENLACES A ESTAS PAGINAS-->
+    {%  if page_num  %}
+        <!--condicional adicional para darle estilo al link de la pagina actual-->
+        {%  if posts.page == page_num  %}
+            <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {%  else %}
+            <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {%  endif  %}
+    {%  else %}
+        <!--Los valores NONE, los mostraremos como puntos suspensivos-->
+    ...
+    {%  endif %}
+{%  endfor %}
 <!-- Boton para publicar   -->
 
 <form method="POST" action="{{ url_for('new_post') }}">      

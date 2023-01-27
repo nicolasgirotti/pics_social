@@ -41,8 +41,9 @@ img{
 
 
 .polaroid {
+  background-color: white;
   margin: auto;
-  width: 300px;
+  width: 20rem;
   box-shadow: 10px 10px 5px #aaaaaa;
   border: 1px solid #cccccc;
   overflow: hidden;
@@ -86,4 +87,23 @@ img{
   100% {
     transform: translateY(0);
   }
+}
+
+
+.polaroid-account {
+  background-color: white;
+  margin: auto;
+  width: 24rem;
+  box-shadow: 10px 10px 5px #aaaaaa;
+  border: 1px solid #cccccc;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.black-photo{
+  background-color: black;
+  height: 300px;
+  width: 300px;
+  margin: auto;
 }

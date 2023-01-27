@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from datetime import datetime
 from social_network import db, app, login_manager
+import jwt
 
 # Funcion con decorador(por convencion es .user_loader) para recargar al usuario desde el user.id guardado en la sesion
 # Esta funcion espera 4 atributos de la clase, que se los daremos con UserMixin
@@ -20,6 +21,22 @@ class User(db.Model, UserMixin):
     
     def __repr__(self):
         return f'User {self.username}, {self.email}, {self.image_file}'
+    
+    def get_reset_token(self):
+        
+        token = jwt.encode({'user_id':self.id,'exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
+        
+        return token
+    
+    def verify_token(token):
+        verify_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        
+        try:
+            user_id = verify_token['user_id']
+            print(verify_token)
+        except:
+            return None
+        return User.query.get(user_id)
 
 
 class Post(db.Model):

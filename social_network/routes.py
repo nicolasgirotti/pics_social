@@ -4,7 +4,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from os import remove
 from social_network import app, db, bcrypt
-from social_network.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewPost
+from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
+                                  NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
 import os, secrets, uuid
 
@@ -13,6 +14,7 @@ app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
 
 @app.route("/", methods=['GET','POST'])
 def home():
+    # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
     page = request.args.get('page', 1, type=int)
     posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('index.html', title='Red social', posts=posts)
@@ -24,7 +26,7 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
 
-    output_size = (125, 125)
+    output_size = (300, 300)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -144,4 +146,23 @@ def delete_post(post_id):
     return redirect(url_for('home'))
 
 
+def send_email():
+    pass
 
+
+@app.route("/reset_request", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = ResetRequest()
+    if form.validate_on_submit():
+        send_email(form.email.data)
+    return render_template('reset_request.html', title='Solicitar cambio de contraseña',form=form)
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = ResetPassword()
+    return render_template('reset_password.html', title='Reestablecer contraseña',form=form)
