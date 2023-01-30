@@ -1,4 +1,4 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from flask_login import current_user
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FileField
@@ -25,6 +25,9 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Registrarse')
     
+    recaptcha = RecaptchaField()
+    
+    
     
     # Verificacion para que el usuario sea unico
     def validate_username(self, username):
@@ -46,8 +49,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Contraseña', validators=[DataRequired()])
     remember = BooleanField('Recordarme')
-    submit = SubmitField('Iniciar sesion')
-    
+    submit = SubmitField('Iniciar sesion')    
 
 class UpdateAccountForm(FlaskForm):
     

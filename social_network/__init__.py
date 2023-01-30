@@ -16,6 +16,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lf8vjgkAAAAAKgO-l_QZnedGEoPF6ACUjIijoug'
+
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lf8vjgkAAAAAOBmesBNtUQkYV2saUFx0GZDn6Ki'
+
 # Instancia de base de datos
 db = SQLAlchemy()
 

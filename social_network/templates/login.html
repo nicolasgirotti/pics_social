@@ -20,22 +20,21 @@
                                 </legend>
                                 <!-- Email   -->
                                 <div class="form-group">
-                                    {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
+                                    {{ form.email (class="form-control form-control-lg", placeholder='Email', autocomplete='off')}}
                                 </div>
                                 <!-- Password   -->
                                 <div class="form-group">
-                                    {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
+                                    {{ form.password (class="form-control form-control-lg", placeholder='Contraseña', autocomplete='off')}}
                                 </div>
-                                <!-- Remember  -->
-                                <div class="form-group">
-                                    {{ form.remember(class="form-check-input") }}
-                                    {{ form.remember.label(class="form-check-label") }}
-                                </div>
+                                
+                                
                             </fieldset>
                             <!--  Submit  -->
-                            <div class="form-group mt-3 mb-2">
-                                {{ form.submit (class="btn btn-outline-info")}}
+                            <div class="form-group mt-3 mb-2 d-grid gap-2">
+                                {{ form.submit (class="btn btn-info")}}
                             </div>
+
+                            
                             
                             <small class="form-group">
                                 <a href="{{ url_for('reset_request') }}">Olvidaste la contraseña?</a>
