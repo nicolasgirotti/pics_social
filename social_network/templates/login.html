@@ -3,43 +3,56 @@
 {% block content %}
 
 
-<div class="container">
-    <div class="row text-center">
-        <div class="col">
-            <form method="POST" action="{{ url_for('login') }}" autocomplete="off" >
-                {{ form.hidden_tag() }}
-                <fieldset class="form-group mt-3">
-                    <legend class="border-bottom mb-4">
-                        Inicia sesion en la Red social
-                    </legend>
-                    <!-- Email   -->
-                    <div class="form-group">
-                        {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
-                    </div>
-                    <!-- Password   -->
-                    <div class="form-group">
-                        {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
-                    </div>
-                    <!-- Remember  -->
-                    <div class="form-group">
-                        {{ form.remember(class="form-check-input") }}
-                        {{ form.remember.label(class="form-check-label") }}
-                    </div>
-                </fieldset>
-                <!--  Submit  -->
-                <div class="form-group mt-3">
-                    {{ form.submit (class="btn btn-outline-info")}}
-                </div>
-                <small class="form-group">
-                    <a href="{{ url_for('reset_request') }}">Olvidaste la contraseña?</a>
-                </small>
-            </form>
+<div class="container ">
+    <div class="row">
+        <div class="col login-image">
+            <img class="polaroid-forms" src="../static/images/home.jpg" alt="imagen de inicio">
         </div>
-        <div class="pt-3">
-            <a class="btn btn-outline-danger ml-2" href="{{ url_for('registration') }}">Registrarse</a>
+        <div class="col">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col">
+                        <form method="POST" action="{{ url_for('login') }}" autocomplete="off" >
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group mt-3">
+                                <legend class="border-bottom mb-4 title">
+                                    Inicia sesion en Pics
+                                </legend>
+                                <!-- Email   -->
+                                <div class="form-group">
+                                    {{ form.email (class="form-control-lg", placeholder='Email', autocomplete='off')}}
+                                </div>
+                                <!-- Password   -->
+                                <div class="form-group">
+                                    {{ form.password (class="form-control-lg", placeholder='Contraseña', autocomplete='off')}}
+                                </div>
+                                <!-- Remember  -->
+                                <div class="form-group">
+                                    {{ form.remember(class="form-check-input") }}
+                                    {{ form.remember.label(class="form-check-label") }}
+                                </div>
+                            </fieldset>
+                            <!--  Submit  -->
+                            <div class="form-group mt-3 mb-2">
+                                {{ form.submit (class="btn btn-outline-info")}}
+                            </div>
+                            
+                            <small class="form-group">
+                                <a href="{{ url_for('reset_request') }}">Olvidaste la contraseña?</a>
+                            </small>
+                        </form>
+                    </div>
+                    <div class="pt-3">
+                        <a class="btn btn-outline-danger ml-2" href="{{ url_for('registration') }}">Registrarse</a>
+                    </div>
+                </div>
+            </div>
+            
+
         </div>
     </div>
 </div>
+
 
 
 

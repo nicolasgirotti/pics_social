@@ -14,7 +14,18 @@ import os, secrets, uuid
 # Carpeta donde se guardan las fotos de las publicaciones 
 app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
 
-# Ruta de inicio
+
+@app.errorhandler(404)
+def page_not_found_404(error):
+    return render_template('error.html', error=error), 404
+
+
+@app.errorhandler(500)
+def page_not_found_500(error):
+    return render_template('error.html',error=error), 500
+
+
+
 @app.route("/", methods=['GET','POST'])
 def home():
     # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
@@ -23,7 +34,7 @@ def home():
     return render_template('index.html', title='Red social', posts=posts)
 
 
-# Funcion para guardar la foto de perfil en la cuenta del usuario
+# Funcion para guardar la foto de perfil del usuario
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -38,7 +49,6 @@ def save_picture(form_picture):
 
 
 
-# Ruta de cuenta de usuario
 @app.route("/account", methods=['GET','POST'])
 @login_required
 def account():
@@ -61,14 +71,13 @@ def account():
 
 
 
-# Ruta de registro de usuarios
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
+    
     if form.validate_on_submit():
-        # Generamos y guardamos la contraseña hasheada
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=(form.username.data).lower(), email=(form.email.data).lower(), password=hashed_password)
         db.session.add(user)
@@ -79,11 +88,11 @@ def registration():
 
 
 
-# Ruta inicio de sesion
 @app.route("/login", methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
+    
     form = LoginForm()  
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -94,10 +103,10 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Inicio de sesion fallido. Comprueba tus datos', 'danger')
+            
     return render_template('login.html', title='Iniciar sesion', form=form)
 
 
-# Cerrar sesion
 @app.route("/logout")
 def logout():
     logout_user()
@@ -120,8 +129,6 @@ def save_photo(form_picture):
 
 
 
-
-# Ruta para crear publicaciones
 @app.route("/post", methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -130,7 +137,6 @@ def new_post():
     if form.validate_on_submit():
         image = form.photo.data
         image_path = save_photo(image)
-        # Intentar modificar el path de la imagen con la funcion creada para guardar foto de perfil.
         post = Post(content=form.content.data, image=image_path, author=current_user)
         db.session.add(post)
         db.session.commit()
@@ -139,7 +145,6 @@ def new_post():
     return render_template('new_post.html', title='Nueva publicacion',form=form)
 
 
-# Ruta para eliminar publicacion
 @app.route("/post/<int:post_id>/delete", methods=['GET','POST'])
 @login_required
 def delete_post(post_id):
@@ -154,7 +159,6 @@ def delete_post(post_id):
     return redirect(url_for('home'))
 
 
-# Funcion para enviar mail de reestablecimiento de contraseña
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Solicitud de reestablecimiento de contraseña', 
