@@ -1,1 +1,1 @@
-web: gunicorn social_network:app
+web: gunicorn run:app
