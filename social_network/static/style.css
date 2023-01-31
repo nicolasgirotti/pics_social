@@ -11,9 +11,9 @@
     right: 20px;
     background-color: #1DA1F2; 
     color: white;
-    padding: 10px 15px;
+    padding: 1rem 2rem;
     border-radius: 25px;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
@@ -52,10 +52,7 @@ img{
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
-
-.polaroid:hover {
-  transform: scale(1.1);
+  
 }
 
 
@@ -125,3 +122,57 @@ img{
 
 }
 
+.delete-post{
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.aside{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  line-height: 5rem;
+  list-style-type: none;
+  position: fixed;
+}
+
+
+.anchor{
+  display: block;
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+   
+}
+
+.aside-desktop{
+  border-right: 1px black solid;
+  background-color: rgb(37, 37, 37);
+}
+
+
+@media only screen and (max-width:1100px) {
+  .aside-desktop{
+    display: none;
+  }
+}
+
+
+.pagination{
+  margin-left: 4rem;
+  margin-top: 1rem;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.pagination .active {
+  color: #fff;
+}

@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
         
         return token
     
-    # Metodo para verificar token
+    # Metodo para verificar
     def verify_token(token):
         verify_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         # Verifica dentro de bloque try except por si no es valido

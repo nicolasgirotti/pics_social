@@ -3,52 +3,137 @@
 
 {% block content %}
 
+<div class="container">
+    <div class="row">
+        <!-- Aside  -->
+        <div class="col-md-2 aside-desktop">
+            <ul class="aside">
+            <h1 class="text-center text-white mt-4">
+                <i class="fa-solid fa-camera-retro"></i>
+                Pics
+            </h1>
 
-<!-- Formulario para crear publicacion   -->
+                <li>
+                    
+                    <a class="anchor" href="{{ url_for('home')}}">
+                        <i class="fa-solid fa-house"></i> Inicio
+                    </a>
+                </li>
+               
+                <li>
+                    <a class="anchor" href="#">
+                        <i class="fa-solid fa-user"></i>
+                        Perfil
+                    </a>
+                    </li>
+                <li>
+                    <a class="anchor" href="{{ url_for('new_post') }}">
+                        <i class="fa-solid fa-square-plus"></i>
+                        Publicar
+                    </a>
+                </li>
+                <li class="border-top">
+                    <a class="anchor" href="{{ url_for('account') }}">
+                        <i class="fa-solid fa-gear"></i>
+                        Ajustes
+                    </a>
+                </li>
+                <li>
+                    <a class="anchor" href="{{ url_for('logout') }}">
+                        <i class="fa-solid fa-power-off"></i>
+                        Salir
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-<!--  Publicaciones  (.items ya que es una paginacion)-->
+        <!-- Feed   -->
+        <div class="col-auto">
 
-{% for post in posts.items %}
+                <!--(.items ya que es una paginacion)-->
 
-        <div class="container">
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-6">           
-                    <div class="polaroid">
-                        {% if post.image %}
-                            <img class="" src="{{ url_for('static', filename='UPLOAD_FOLDER/' + post.image)   }}" alt="">
-                        {% endif %}
-                        <div>
-                            {% if current_user.id == post.user_id  %}
-                                <a class="btn-sm btn-warning" href="{{ url_for('delete_post', post_id=post.id)}}">Eliminar</a>
-                            {% endif %}
+                {% for post in posts.items %}
+
+                <div class="container">
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-md-6">           
+                            <div class="polaroid">
+                                <div class="row">
+                                    <img class="" src="{{ url_for('static', filename='UPLOAD_FOLDER/' + post.image)   }}" alt="Publicacion">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-2">
+                                            {{ post.author.username }}
+                                        </div>
+                                        <p class=''>
+                                            {{ post.content }}
+                                        </p>
+                                    </div>
+                                    <div class="col-2 mt-2 ml-2">
+                                        {% if current_user.id == post.user_id  %}
+                                            <div class="btn-group dropstart">
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-dark">
+                                            <!-- Button trigger modal -->
+                                                    <li>
+                                                        <a type="" class="delete-post" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                        Eliminar</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar publicacion</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    Desea eliminar esta publicacion?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <a class="btn btn-danger" href="{{ url_for('delete_post', post_id=post.id)}}">Eliminar</a>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>                    
+                            </div>
                         </div>
-                        <div class="mb-2">
-                            {{ post.author.username }}
-                        </div>
-                        <p>
-                            {{ post.content }}
-                        </p>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
         </div>
-{% endfor %}
+    </div>
+</div>
 
-<!-- BUCLE FOR PARA RECORRER PAGINAS-->
-{%  for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1,right_current=2) %}
-<!-- CREAMOS ENLACES A ESTAS PAGINAS-->
-    {%  if page_num  %}
-        <!--condicional adicional para darle estilo al link de la pagina actual-->
-        {%  if posts.page == page_num  %}
-            <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+
+<!-- Bucle que itera sobre las paginas-->
+<div class="pagination">
+    {%  for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1,right_current=2) %}
+        <!-- Enlaces a otras paginas-->
+        {%  if page_num  %}
+            <!--condicional adicional para darle estilo al link de la pagina actual-->
+            {%  if posts.page == page_num  %}
+                <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+            {%  else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+            {%  endif  %}
         {%  else %}
-            <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
-        {%  endif  %}
-    {%  else %}
-        <!--Los valores NONE, los mostraremos como puntos suspensivos-->
-    ...
-    {%  endif %}
-{%  endfor %}
+            <!--Los valores NONE, los mostraremos como puntos suspensivos-->
+        ...
+        {%  endif %}
+    {%  endfor %}
+
+</div>
+
 
 <!-- Boton para publicar   -->
 
