@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="card" style="width: 10rem;">
+          <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
+
+          <div class="card-body">
+            <p class="card-title">{{ user.username }}</p>
+          </div>
+        </div>
+
+       
+      </div>
+      <div class="col">
+        <div class="flex-container">
+          {% for photo in photos.items  %}
+          <div class="card" style="width: 25rem;">
+            <img src="{{ url_for('static', filename='UPLOAD_FOLDER/' +  photo.image) }}" class="card-img-top" alt="...">
+        
+            <div class="card-body">
+              <p class="card-title">{{ photo.content }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+     
+    </div>
+  </div>
+
+
+
+  
+  
+  
+
+
+{% endblock content %}
+
+

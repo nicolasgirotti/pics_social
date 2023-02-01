@@ -25,13 +25,15 @@ def page_not_found_500(error):
     return render_template('error.html',error=error), 500
 
 
-
 @app.route("/", methods=['GET','POST'])
 def home():
     # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
     page = request.args.get('page', 1, type=int)
+    # Estas deben ser las fotos del explorador. Agregar opcion compartir historia. Cuanta gente la leyo
     posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('index.html', title='Red social', posts=posts)
+    user_photos = User.query.all()
+
+    return render_template('index.html', title='Red social', posts=posts, user_photos=user_photos)
 
 
 # Funcion para guardar la foto de perfil del usuario
@@ -181,7 +183,10 @@ def reset_request():
     form = ResetRequest()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        send_reset_email(user)
+        try:
+            send_reset_email(user)
+        except:
+            pass
         flash('Se ha enviado un correo con instrucciones para reestablecer su contraseña', 'info')
         return redirect(url_for('login'))
     return render_template('reset_request.html', title='Solicitar cambio de contraseña',form=form)
@@ -204,3 +209,19 @@ def reset_password(token):
         return redirect(url_for('login'))
         
     return render_template('reset_password.html', title='Reestablecer contraseña',form=form, token=token)
+
+
+
+# VER COMO HACER PARA QUE CUANDO SE TOQUE EL NOMBRE DEL USUARIO NOS REDIRIJA A SU PERFIL EN UN OFF CANVAS
+
+# SINO DECIDIR QUE HACER CON EL OFFCANVAS
+
+
+@app.route("/profile/<string:username>")
+def profile(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    photos = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=5)
+    return render_template('profile.html', photos=photos, user=user)

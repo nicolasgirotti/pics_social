@@ -42,7 +42,11 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Cerrar sesion</a>
             </li>
-            
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" >Perfil</a>
+            </li>
+          
+                        
         {% else %}
 
         <!-- Barra de navegacion para usuario no autenticado -->
@@ -70,6 +74,9 @@
       </button>      
     </div>
   </nav>
+
+
+  
 
   <!-- Mostrar mensajes flash -->
   {% with messages = get_flashed_messages(with_categories=true) %}

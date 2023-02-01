@@ -10,15 +10,17 @@ import os
 # Instancia de aplicacion
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'a8a54e926a2b165d16413935e650936f'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lf8vjgkAAAAAKgO-l_QZnedGEoPF6ACUjIijoug'
+app.config['RECAPTCHA_PUBLIC_KEY'] = os.getenv('RECAPTCHA_PUBLIC_KEY')
 
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lf8vjgkAAAAAOBmesBNtUQkYV2saUFx0GZDn6Ki'
+app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
+
+
 
 # Instancia de base de datos
 db = SQLAlchemy()
