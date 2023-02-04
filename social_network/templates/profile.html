@@ -3,41 +3,60 @@
 {% block content %}
 
 
+<div class="container">
+  <div class="row">
+    <div class="col-4-sm">
+      <div class=polaroid>
+        <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
+        <p>{{user.username }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
   <div class="container">
     <div class="row">
-      <div class="col">
-        <div class="card" style="width: 10rem;">
-          <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
+      <div class="col-4-sm">
+        {% for photo in photos.items  %}
+            <div class="polaroid">
+              <img src="{{ url_for('static', filename='UPLOAD_FOLDER/' +  photo.image) }}" class="card-img-top" alt="...">
+              <p>{{ photo.content }}</p>
+          {% if current_user.id == photo.user_id %}
+              <!-- INGRESAR BOTON PARA ELIMINAR -->
+              <a class="btn btn-danger" href="{{ url_for('delete_post', post_id=photo.id)}}">Eliminar</a>
 
-          <div class="card-body">
-            <p class="card-title">{{ user.username }}</p>
-          </div>
-        </div>
 
-       
-      </div>
-      <div class="col">
-        <div class="flex-container">
-          {% for photo in photos.items  %}
-          <div class="card" style="width: 25rem;">
-            <img src="{{ url_for('static', filename='UPLOAD_FOLDER/' +  photo.image) }}" class="card-img-top" alt="...">
-        
-            <div class="card-body">
-              <p class="card-title">{{ photo.content }}</p>
+          {% endif %}
+
+           <!-- Modal -->
+           <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar publicacion</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                Desea eliminar esta publicacion?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-danger" href="{{ url_for('delete_post', post_id=photo.id)}}">Eliminar</a>
+                </div>
             </div>
           </div>
-          {% endfor %}
+
+
+         
         </div>
+          
+          
+        </div>
+      {% endfor %}
       </div>
-     
     </div>
   </div>
 
-
-
-  
-  
-  
 
 
 {% endblock content %}

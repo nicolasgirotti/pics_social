@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="../static/images/camara.ico">
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+
+    
+  </head>
+  <body>
+
+
+
+<div class="chat-container">
+      <div class="chat-header">
+        <h1>Chat</h1>
+      </div>
+      <div class="chat-messages">
+        <ul class="msg" id="messages">
+        </ul>
+      </div>
+      <div class="chat-input">
+        <form>
+          <input type="text" id="username" placeholder="Nombre de usuario" autocomplete='off'>
+
+          <input type="text" id="message" placeholder="Escribe un mensaje..." autocomplete='off'>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+
+
+<script>
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+  socket.on('message', function(data) {
+    var li = document.createElement('li');
+    li.innerHTML = data;
+    document.getElementById('messages').appendChild(li);
+  });
+  
+  document.querySelector('form').onsubmit = function() {
+    var username = document.getElementById('username').value;
+    var message = document.getElementById('message').value;
+    socket.emit('message', { username: username, message: message });
+    document.getElementById('message').value = '';
+    return false;
+  };
+</script>
+
+
+  </body>
+</html>

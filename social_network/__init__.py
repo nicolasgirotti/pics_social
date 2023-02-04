@@ -4,11 +4,15 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+from flask_socketio import SocketIO
 import os
 
 
 # Instancia de aplicacion
 app = Flask(__name__)
+
+socketio = SocketIO(app)
+
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 

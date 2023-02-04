@@ -1,10 +1,11 @@
 from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
+from flask_socketio import emit
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from os import remove
-from social_network import app, db, bcrypt, mail
+from social_network import app, db, bcrypt, mail, socketio
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
                                   NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
@@ -13,6 +14,7 @@ import os, secrets, uuid
 
 # Carpeta donde se guardan las fotos de las publicaciones 
 app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
+
 
 
 @app.errorhandler(404)
@@ -211,12 +213,6 @@ def reset_password(token):
     return render_template('reset_password.html', title='Reestablecer contraseña',form=form, token=token)
 
 
-
-# VER COMO HACER PARA QUE CUANDO SE TOQUE EL NOMBRE DEL USUARIO NOS REDIRIJA A SU PERFIL EN UN OFF CANVAS
-
-# SINO DECIDIR QUE HACER CON EL OFFCANVAS
-
-
 @app.route("/profile/<string:username>")
 def profile(username):
     page = request.args.get('page', 1, type=int)
@@ -225,3 +221,17 @@ def profile(username):
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
     return render_template('profile.html', photos=photos, user=user)
+
+
+@app.route("/chat")
+def chat():
+    return render_template("chat_room.html")
+
+
+@socketio.on('message')
+def handle_message(data):
+    
+    username = data['username']
+    message = data['message']
+    emit('message', f'{username}: {message}', broadcast=True)
+
