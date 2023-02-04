@@ -1,11 +1,10 @@
 from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
-from flask_socketio import emit
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from os import remove
-from social_network import app, db, bcrypt, mail, socketio
+from social_network import app, db, bcrypt, mail
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
                                   NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
@@ -221,17 +220,4 @@ def profile(username):
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
     return render_template('profile.html', photos=photos, user=user)
-
-
-@app.route("/chat")
-def chat():
-    return render_template("chat_room.html")
-
-
-@socketio.on('message')
-def handle_message(data):
-    
-    username = data['username']
-    message = data['message']
-    emit('message', f'{username}: {message}', broadcast=True)
 

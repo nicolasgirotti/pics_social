@@ -1,8 +1,7 @@
-from social_network import app, socketio
+from social_network import app
 
 
 if __name__ == '__main__':
-    
-    socketio.run(app, debug=True, ssl_context=('cert.pem', 'key.pem'))
+    app.run(debug=True)
     
     
