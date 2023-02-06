@@ -5,26 +5,44 @@ document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + location.hostname + ':' + location.port);
 
     //var socket = io('https://pics.proyectocoder.com');
+    
 
     let room = 'Pics';
     joinRoom("Pics");
 
     // Display incoming messages
     socket.on('message', data => {
-        
         const p = document.createElement('p');
         const span_username = document.createElement('span');
         const span_time = document.createElement('span');
         const br = document.createElement('br');
 
-        if (data.username) {
+        if (data.username == username) {
+            p.setAttribute("class", "my-msg")
+            // my user
+            span_username.setAttribute("class", "my-user")
             span_username.innerHTML = data.username;
+            // my time
+            span_time.setAttribute("class", "my-time")
             span_time.innerHTML = data.time;
             p.innerHTML = span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_time.outerHTML;
             document.querySelector('#display-message-section').append(p);
+        } else if( typeof data.username !== 'undefined') {
+            p.setAttribute("class", "other-msg");
+            // other username
+            span_username.setAttribute("class","other-user");
+            span_username.innerHTML = data.username;
+            // other time
+            span_time.setAttribute("class", "other-time")
+            span_time.innerHTML = data.time;
+            // append
+            p.innerHTML = span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_time.outerHTML;
+            document.querySelector('#display-message-section').append(p);
+
         } else {
             printSysMsg(data.msg);
         }
+    scrollDownChat();
 
     });
 
@@ -65,11 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#user_message').focus();
     }
 
+
+    //Scroll down chat
+    function scrollDownChat() {
+        const chatWindow = document.querySelector('#display-message-section');
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
     //Print message
     function printSysMsg(msg) {
         const p = document.createElement('p');
         p.innerHTML = msg;
         document.querySelector('#display-message-section').append(p);
+        scrollDownChat()
     }
+
+    
     
 })

@@ -22,25 +22,10 @@
 
 
     <!-- Nav bar start -->
-    <nav class="navbar navbar-expand-sm navbar-light fixed-top">
-
-      <div class="container-fluid">
-          <div id="show-sidebar-button" class="cursor-pointer">
-            <i class="fa-solid fa-plus"></i>
-              <span>Rooms</span>
-          </div>
-
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item">
-                      <a id="logout-btn" class="nav-link" href="{{ url_for('logout') }}"><span style="color: #335177">Logout</span></a>
-                  </li>
-              </ul>
-          </div>
-      </div>
+    <nav class="navbar-chat fixed-top">
+          <a class="anchor" href="{{ url_for('home')}}">
+            <i class="fa-solid fa-camera-retro"></i> <span>Volver a Pics</span>
+        </a>
   </nav>
   <!-- Nav bar end -->
     <!-- Main section   -->
@@ -60,15 +45,20 @@
         <div id="display-message-section"></div>
 
         <!-- Input message -->
-        <div id="input-area">
-          <input
+        <div class="row g-2" id="input-area">
+          <div class="col">
+            <input
             class="form-control"
             type="text"
             id="user_message"
             placeholder="Type here.."
             autocomplete="off"
-          />
-          <button type="button" id="send_message">Enviar</button>
+            />
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-warning" type="button" id="send_message">Enviar</button>
+          </div>
+          
         </div>
       </div>
     </div>

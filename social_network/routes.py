@@ -13,7 +13,7 @@ from social_network.models import User, Post
 import os, secrets, uuid
 
 
-ROOMS = ['pics grupal', 'amigos']
+ROOMS = ['pics grupal']
 
 
 # Carpeta donde se guardan las fotos de las publicaciones 
@@ -243,7 +243,7 @@ def join(data):
     join_room(data['room'])
     # Se envia una notificacion de que se unio cierto usuario, y se envia esta informacion
     # a cierto room.
-    send({'msg': data['username'] + " se ha unido al chat"}, room=data['room'])
+    send({'msg': data['username'] + " se ha unido al chat " + data['room'] }, room=data['room'])
 
 
 @socketio.on('leave')

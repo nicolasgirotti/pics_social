@@ -17,7 +17,11 @@
                 </li>
                
                 {% if current_user.is_authenticated %}
-                    
+                    <li><!-- Chat  -->
+                        <a class="anchor" href="{{ url_for('chat') }}" target="_blank">
+                            <i class="fa-regular fa-comment"></i> Chat
+                        </a>
+                    </li>
                     <li><!-- Profile   -->
                         <a class="anchor" href="{{ url_for('profile', username=current_user.username) }}" >
 
