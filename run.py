@@ -1,6 +1,7 @@
-from social_network import app
+from social_network import app, socketio
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)
+    #app.run()
     
     

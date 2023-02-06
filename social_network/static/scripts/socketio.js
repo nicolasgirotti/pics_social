@@ -2,13 +2,16 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    var socket = io('https://pics.proyectocoder.com');
+    var socket = io.connect('http://' + location.hostname + ':' + location.port);
+
+    //var socket = io('https://pics.proyectocoder.com');
 
     let room = 'Pics';
     joinRoom("Pics");
 
     // Display incoming messages
     socket.on('message', data => {
+        
         const p = document.createElement('p');
         const span_username = document.createElement('span');
         const span_time = document.createElement('span');
