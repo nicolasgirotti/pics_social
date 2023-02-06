@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+from flask_socketio import SocketIO
 import os
 
 
@@ -25,6 +26,9 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 # Instancia de base de datos
 db = SQLAlchemy()
+
+# Instancia de flask-socketio
+socketio = SocketIO(app)
 
 # Instancia para hashear contraseñas
 bcrypt = Bcrypt(app)

@@ -1,19 +1,23 @@
+from time import localtime, strftime
 from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from flask_mail import Message
+from flask_socketio import send, emit, join_room, leave_room
 from os import remove
-from social_network import app, db, bcrypt, mail
+from social_network import app, db, bcrypt, mail, socketio
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
                                   NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
 import os, secrets, uuid
 
 
+ROOMS = ['pics grupal', 'amigos']
+
+
 # Carpeta donde se guardan las fotos de las publicaciones 
 app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
-
 
 
 @app.errorhandler(404)
@@ -221,3 +225,40 @@ def profile(username):
         .paginate(page=page, per_page=5)
     return render_template('profile.html', photos=photos, user=user)
 
+
+
+# Logica de chat
+
+
+@app.route("/chat", methods=['GET', 'POST'])
+@login_required
+def chat():
+    return render_template('chat.html', username= current_user.username, rooms=ROOMS)
+
+# Eventos
+
+@socketio.on('join')
+def join(data):
+    
+    join_room(data['room'])
+    # Se envia una notificacion de que se unio cierto usuario, y se envia esta informacion
+    # a cierto room.
+    send({'msg': data['username'] + " se ha unido al chat"}, room=data['room'])
+
+
+@socketio.on('leave')
+def leave(data):
+    
+    leave_room(data['room'])
+    send({'msg': data['username'] + " ha abandonado el chat"}, room=data['room'])
+    
+
+
+@socketio.on('message')
+def message(data):
+    # imprimimos mensaje en la terminal
+    print(f'\n\n {data} \n\n')
+    
+    # Enviamos mensaje por broadcast a todos los clientes conectados
+    send({'msg':data['msg'], 'username':data['username'], 
+          'time': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])
