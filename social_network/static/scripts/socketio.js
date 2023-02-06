@@ -2,7 +2,7 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    var socket = io.connect('pics.proyectocoder.com');
+    var socket = io('https://pics.proyectocoder.com');
 
     let room = 'Pics';
     joinRoom("Pics");
