@@ -18,38 +18,42 @@
     <link href="../static/style.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/26c5d45d54.js" crossorigin="anonymous"></script>
 </head>
+
+
 <body class='background'>
+
+<!-- Nav bar desktop  -->
   {% if current_user.is_authenticated %}
     <nav id="sidebar-pics">
       <ul>
-        <li><!-- Home   -->
+        <li>
+          <!-- Home   -->
           <a class="anchor icon" href="{{ url_for('home')}}">
               <i class="fa-solid fa-camera-retro"></i>  Pics
           </a>
           <hr>
         </li>
-        <li><!-- Chat  -->
+        <li>
+          <!-- Chat  -->
             <a class="anchor" href="{{ url_for('chat') }}" target="_blank">
                 <i class="fa-regular fa-comment"></i> Chat
             </a>
         </li>
-        <li><!-- Profile   -->
+        <li>
+          <!-- Profile   -->
             <a class="anchor" href="{{ url_for('profile', username=current_user.username) }}" >
 
                 <i class="fa-solid fa-user"></i>  Perfil
             </a>
         </li>
-        <li><!-- New post   -->
+        <li>
+          <!-- New post   -->
             <a class="anchor" href="{{ url_for('new_post') }}" >
                 <i class="fa-solid fa-square-plus"></i>  Crear
                 
             </a>
-        </li><!-- Account configuration  -->
-        <li><!-- Profile   -->
-            <a class="anchor" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
-                <i class="fa-solid fa-address-book"></i>  Contactos
-            </a>
         </li>
+        <!-- Account configuration  -->
         <li class="">
             <a class="anchor" href="{{ url_for('account') }}">
                 <i class="fa-solid fa-gear"></i>  Ajustes
@@ -61,10 +65,11 @@
                 <i class="fa-solid fa-power-off"></i>  Salir
             </a>
         </li>
+
     </ul>
   </nav>
   {% endif %}
-  <!-- Nav bar -->
+  <!-- Nav bar mobile-->
 
   <div class="collapse" id="navbarToggleExternalContent">
     <div class="bg-dark p-4">
