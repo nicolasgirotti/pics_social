@@ -4,21 +4,9 @@
 
 
 
-    <div class="container text-center mt-4">
+    <div class="container">
         <div class="row justify-content-center mb-4">
-                <div class="col-3 aside-desktop">
-                    <ul class="aside">
-                    <h1 class="text-center text-white mt-4">
-                        <i class="fa-solid fa-camera-retro"></i>
-                        Pics
-                    </h1>
-                        <li>
-                            <a class="anchor" href="{{ url_for('home')}}">
-                                <i class="fa-solid fa-house"></i> Volver al inicio
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                
             <div class="col-md-6">           
                 <div class="polaroid">
                     <form method='POST' action="{{ url_for('new_post') }}" enctype="multipart/form-data">
