@@ -85,7 +85,7 @@ class ResetPassword(FlaskForm):
     
 #Formulario para crear publicacion                       
 class NewPost(FlaskForm):
-    content = TextAreaField('Contenido', validators=[DataRequired(), Length(min=1, max=144)])
+    content = TextAreaField('Contenido', validators=[DataRequired(), Length(min=1, max=60)])
     photo = FileField('Imagen', validators=[DataRequired(),FileAllowed(['jpg', 'png', 'jpeg'], 'Solo formato jpg o png')])
     submit = SubmitField('Publicar')
     

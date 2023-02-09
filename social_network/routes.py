@@ -1,8 +1,7 @@
 from time import localtime, strftime
-from flask import render_template, redirect, url_for, flash, request, abort
+from flask import render_template, redirect, url_for, flash, request, abort, jsonify
 from PIL import Image
 from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.utils import secure_filename
 from flask_mail import Message
 from flask_socketio import send, emit, join_room, leave_room
 from os import remove
@@ -10,7 +9,7 @@ from social_network import app, db, bcrypt, mail, socketio
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
                                   NewPost, ResetPassword,ResetRequest)
 from social_network.models import User, Post
-import os, secrets, uuid
+import os, secrets, bleach
 
 
 ROOMS = ['pics grupal']
@@ -244,7 +243,7 @@ def join(data):
     join_room(data['room'])
     # Se envia una notificacion de que se unio cierto usuario, y se envia esta informacion
     # a cierto room.
-    send({'msg': data['username'] + " se ha unido al chat " + data['room'] }, room=data['room'])
+    send({'msg': data['username'] + " se ha unido al chat de " + data['room'] }, room=data['room'])
 
 
 @socketio.on('leave')
@@ -255,11 +254,12 @@ def leave(data):
     
 
 
+
+
 @socketio.on('message')
 def message(data):
     # imprimimos mensaje en la terminal
-    print(f'\n\n {data} \n\n')
-    
+    print(f'\n\n{data} \n\n')
     # Enviamos mensaje por broadcast a todos los clientes conectados
-    send({'msg':data['msg'], 'username':data['username'], 
+    send({'msg':bleach.clean(data['msg']), 'username':data['username'], 
           'time': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])

@@ -1,11 +1,11 @@
 
 
-
 document.addEventListener('DOMContentLoaded', () => {
+
     var socket = io.connect('http://' + location.hostname + ':' + location.port);
 
     //var socket = io('https://pics.proyectocoder.com');
-    
+   
 
     let room = 'Pics';
     joinRoom("Pics");
@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const span_time = document.createElement('span');
         const br = document.createElement('br');
 
+        // Sanitiza el mensaje del usuario
+
         if (data.username == username) {
             p.setAttribute("class", "my-msg")
             // my user
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             span_time.innerHTML = data.time;
             p.innerHTML = span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_time.outerHTML;
             document.querySelector('#display-message-section').append(p);
+            
         } else if( typeof data.username !== 'undefined') {
             p.setAttribute("class", "other-msg");
             // other username
@@ -48,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send message
     document.querySelector('#send_message').onclick = () => {
+
+        
         socket.send({'msg':document.querySelector('#user_message').value,
         'username': username, 'room': room});
         // Clear message area

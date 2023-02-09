@@ -6,9 +6,14 @@
 <div class="container">
   <div class="row">
     <div class="col-4-sm">
-      <div class=polaroid>
+      <div class="polaroid mt-2 mb-4">
         <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
-        <p>{{user.username }}</p>
+        <p class="username-settings">{{user.username }}</p>
+        {% if current_user.id == user.id %}
+            <a class="user-settings" href="{{ url_for('account') }}">
+              <i class="fa-solid fa-gear"></i> Ajustes de cuenta
+            </a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -18,13 +23,14 @@
     <div class="row">
       <div class="col-4-sm">
         {% for photo in photos.items  %}
-            <div class="polaroid">
+            <div class="polaroid mb-4">
               <img src="{{ url_for('static', filename='UPLOAD_FOLDER/' +  photo.image) }}" class="card-img-top" alt="...">
-              <p>{{ photo.content }}</p>
+              <p class="post-content-profile">{{ photo.content }}</p>
           {% if current_user.id == photo.user_id %}
               <!-- INGRESAR BOTON PARA ELIMINAR -->
                 <a type="" class="delete-post" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                Eliminar</a>
+                  <i class="fa-solid fa-trash" id="trash-icon"></i>
+                </a>
             
           {% endif %}
 
