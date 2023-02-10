@@ -19,6 +19,7 @@ ROOMS = ['pics grupal']
 app.config['UPLOAD_FOLDER'] = 'UPLOAD_FOLDER'
 
 
+# Error de pagina
 @app.errorhandler(404)
 def page_not_found_404(error):
     return render_template('error.html', error=error), 404
@@ -29,53 +30,7 @@ def page_not_found_500(error):
     return render_template('error.html',error=error), 500
 
 
-@app.route("/", methods=['GET','POST'])
-def home():
-    # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
-    page = request.args.get('page', 1, type=int)
-    # Estas deben ser las fotos del explorador. Agregar opcion compartir historia. Cuanta gente la leyo
-    posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    user_photos = User.query.all()
-
-    return render_template('index.html', title='Red social', posts=posts, user_photos=user_photos)
-
-
-# Funcion para guardar la foto de perfil del usuario
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-    output_size = (300, 300)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
-
-
-
-@app.route("/account", methods=['GET','POST'])
-@login_required
-def account():
-    form = UpdateAccountForm()
-    if form.validate_on_submit():
-        if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        db.session.commit()
-        flash('Tu cuenta ha sido actualizada!', 'success')
-        return redirect(url_for('account'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account',
-                           image_file=image_file, form=form)
-
-
+# Rutas relacionadas al registro de cuentas
 
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
@@ -94,7 +49,7 @@ def registration():
 
 
 
-@app.route("/login", methods=['GET','POST'])
+@app.route("/", methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -119,6 +74,64 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route("/home", methods=['GET','POST'])
+def home():
+    # Query que obtiene la pagina, establece una pagina por defecto y valida el numero de paginas como enteros
+    page = request.args.get('page', 1, type=int)
+    # Estas deben ser las fotos del explorador. Agregar opcion compartir historia. Cuanta gente la leyo
+    posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    user_photos = User.query.all()
+
+    return render_template('index.html', title='Red social', posts=posts, user_photos=user_photos)
+
+
+# Funcion para guardar la foto de perfil del usuario
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    output_size = (300, 300)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+
+@app.route("/account", methods=['GET','POST'])
+@login_required
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Tu cuenta ha sido actualizada!', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('account.html', title='Account',
+                           image_file=image_file, form=form)
+
+
+@app.route("/profile/<string:username>")
+@login_required
+def profile(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    photos = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=5)
+    return render_template('profile.html', photos=photos, user=user)
+
+
+
 
 # Rutas para guardar fotos de publicaciones en carpeta
 def save_photo(form_picture):
@@ -132,7 +145,6 @@ def save_photo(form_picture):
     i.save(picture_path)
     
     return picture_fn
-
 
 
 @app.route("/post", methods=['GET', 'POST'])
@@ -215,20 +227,45 @@ def reset_password(token):
     return render_template('reset_password.html', title='Reestablecer contraseña',form=form, token=token)
 
 
-@app.route("/profile/<string:username>")
+
+
+# Rutas de follow
+
+@app.route('/follow/<username>', methods=['GET', 'POST'])
 @login_required
-def profile(username):
-    page = request.args.get('page', 1, type=int)
-    user = User.query.filter_by(username=username).first_or_404()
-    photos = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
-        .paginate(page=page, per_page=5)
-    return render_template('profile.html', photos=photos, user=user)
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Usuario invalido', 'danger')
+        return redirect(url_for('profile', username=username))
+    if current_user.is_following(user):
+        flash(f'Ya estas siguiendo a {user.username}')
+        return redirect(url_for('profile', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash(f'Has empezado a seguir a {user.username}.', 'info')
+    return redirect(url_for('profile', username=username))
+
+
+
+@app.route('/unfollow/<username>', methods=['GET', 'POST'])
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Invalid user.')
+        return redirect(url_for('profile', username=username))
+    if not current_user.is_following(user):
+        flash(f'Reformar ruta {user.username}.')
+        return redirect(url_for('profile', username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash(f'Has dejado de seguir a {user.username}', 'info')
+    return redirect(url_for('profile', username=username))
 
 
 
 # Logica de chat
-
 
 @app.route("/chat", methods=['GET', 'POST'])
 @login_required
@@ -253,9 +290,6 @@ def leave(data):
     send({'msg': data['username'] + " ha abandonado el chat"}, room=data['room'])
     
 
-
-
-
 @socketio.on('message')
 def message(data):
     # imprimimos mensaje en la terminal
@@ -263,3 +297,10 @@ def message(data):
     # Enviamos mensaje por broadcast a todos los clientes conectados
     send({'msg':bleach.clean(data['msg']), 'username':data['username'], 
           'time': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])
+    
+    
+    
+    
+    
+    
+

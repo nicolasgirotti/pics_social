@@ -8,11 +8,21 @@
     <div class="col-4-sm">
       <div class="polaroid mt-2 mb-4">
         <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
-        <p class="username-settings">{{user.username }}</p>
+        <p class="username-settings">{{user.username|title }}</p>
         {% if current_user.id == user.id %}
             <a class="user-settings" href="{{ url_for('account') }}">
               <i class="fa-solid fa-gear"></i> Ajustes de cuenta
             </a>
+            <!-- Opciones para seguir a usuario -->
+        {% elif not current_user.is_following(user)  %}
+            <a id="user-follow" class="btn btn-info" href="{{  url_for('follow', username=user.username)  }}">
+              <i class="fa-solid fa-user-plus"></i>
+            </a> 
+
+        {% else %}
+            <a id="user-follow" class="btn btn-danger" href="{{  url_for('unfollow', username=user.username)  }}">
+                <i class="fa-solid fa-user-minus mb-2"></i>
+            </a>   
         {% endif %}
       </div>
     </div>
