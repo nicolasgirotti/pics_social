@@ -1,6 +1,6 @@
 from time import localtime, strftime
 from flask import render_template, redirect, url_for, flash, request, abort
-from PIL import Image
+from PIL import Image, ExifTags
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_mail import Message
 from flask_socketio import send, join_room, leave_room
@@ -142,6 +142,24 @@ def save_photo(form_picture):
     picture_path = os.path.join(app.root_path, 'static/UPLOAD_FOLDER', picture_fn)
     output_size = (350, 350)
     i = Image.open(form_picture)
+    
+    for orientation in ExifTags.TAGS.keys():
+        if ExifTags.TAGS[orientation]=='Orientation':
+            break
+
+    try:
+        exif=dict(i._getexif().items())
+        if exif[orientation] == 3:
+            i=i.rotate(180, expand=True)
+        elif exif[orientation] == 6:
+            i=i.rotate(270, expand=True)
+        elif exif[orientation] == 8:
+            i=i.rotate(90, expand=True)
+    except (AttributeError, KeyError, IndexError):
+        # cases: image don't have getexif
+        pass
+    
+    
     i.thumbnail(output_size)
     i.save(picture_path)
     
