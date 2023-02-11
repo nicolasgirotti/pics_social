@@ -1,9 +1,9 @@
 from time import localtime, strftime
-from flask import render_template, redirect, url_for, flash, request, abort, jsonify
+from flask import render_template, redirect, url_for, flash, request, abort
 from PIL import Image
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_mail import Message
-from flask_socketio import send, emit, join_room, leave_room
+from flask_socketio import send, join_room, leave_room
 from os import remove
 from social_network import app, db, bcrypt, mail, socketio
 from social_network.forms import (RegistrationForm, LoginForm, UpdateAccountForm, 
@@ -43,7 +43,7 @@ def registration():
         user = User(username=(form.username.data).lower(), email=(form.email.data).lower(), password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Cuenta creada, puedes iniciar sesion.', 'success')
+        flash('Cuenta creada, puedes iniciar sesion.', 'info')
         return redirect(url_for('login'))
     return render_template('registration.html', title='Registro de usuarios',form=form)
 
@@ -60,7 +60,7 @@ def login():
         
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            flash('Has iniciado sesion', 'success')
+            flash('Has iniciado sesion', 'info')
             return redirect(url_for('home'))
         else:
             flash('Inicio de sesion fallido. Comprueba tus datos', 'danger')
@@ -81,7 +81,6 @@ def home():
     # Estas deben ser las fotos del explorador. Agregar opcion compartir historia. Cuanta gente la leyo
     posts =  Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     user_photos = User.query.all()
-
     return render_template('index.html', title='Red social', posts=posts, user_photos=user_photos)
 
 
@@ -110,7 +109,7 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Tu cuenta ha sido actualizada!', 'success')
+        flash('Tu cuenta ha sido actualizada!', 'info')
         return redirect(url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
@@ -128,6 +127,8 @@ def profile(username):
     photos = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
+
+    
     return render_template('profile.html', photos=photos, user=user)
 
 
@@ -158,7 +159,7 @@ def new_post():
         post = Post(content=form.content.data, image=image_path, author=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Publicacion creada con exito', 'success')
+        flash('Publicacion creada con exito', 'info')
         return redirect(url_for('home'))
     return render_template('new_post.html', title='Nueva publicacion',form=form)
 
@@ -292,8 +293,6 @@ def leave(data):
 
 @socketio.on('message')
 def message(data):
-    # imprimimos mensaje en la terminal
-    print(f'\n\n{data} \n\n')
     # Enviamos mensaje por broadcast a todos los clientes conectados
     send({'msg':bleach.clean(data['msg']), 'username':data['username'], 
           'time': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])
@@ -301,6 +300,8 @@ def message(data):
     
     
     
-    
-    
-
+@app.route("/friends", methods=['GET', 'POST'])
+def friends():
+    user = current_user
+    friends = user.friends()        
+    return render_template('friends_list.html', friends=friends)

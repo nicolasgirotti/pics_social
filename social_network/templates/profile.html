@@ -4,10 +4,10 @@
 
 
 <div class="container">
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-4-sm">
-      <div class="polaroid mt-2 mb-4">
-        <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" class="card-img-top" alt="...">
+      <div class="profile-user">
+        <img src="{{ url_for('static', filename='profile_pics/' +  user.image_file) }}" alt="...">
         <p class="username-settings">{{user.username|title }}</p>
         {% if current_user.id == user.id %}
             <a class="user-settings" href="{{ url_for('account') }}">
@@ -16,12 +16,12 @@
             <!-- Opciones para seguir a usuario -->
         {% elif not current_user.is_following(user)  %}
             <a id="user-follow" class="btn btn-info" href="{{  url_for('follow', username=user.username)  }}">
-              <i class="fa-solid fa-user-plus"></i>
+              Seguir 
             </a> 
 
         {% else %}
             <a id="user-follow" class="btn btn-danger" href="{{  url_for('unfollow', username=user.username)  }}">
-                <i class="fa-solid fa-user-minus mb-2"></i>
+                Dejar de seguir
             </a>   
         {% endif %}
       </div>
@@ -29,49 +29,51 @@
   </div>
 </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-4-sm">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-4-sm ">
+      <div class="grid">
         {% for photo in photos.items  %}
-            <div class="polaroid mb-4">
+            <div class="grid-item polaroid-profile mb-4 ">
               <img src="{{ url_for('static', filename='UPLOAD_FOLDER/' +  photo.image) }}" class="card-img-top" alt="...">
               <p class="post-content-profile">{{ photo.content }}</p>
-          {% if current_user.id == photo.user_id %}
-              <!-- INGRESAR BOTON PARA ELIMINAR -->
-                <a type="" class="delete-post" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                  <i class="fa-solid fa-trash" id="trash-icon"></i>
-                </a>
             
-          {% endif %}
-
-           <!-- Modal -->
-           <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar publicacion</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              {% if current_user.id == photo.user_id %}
+                  <!-- INGRESAR BOTON PARA ELIMINAR -->
+                    <a type="" class="delete-post" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                      <i class="fa-solid fa-trash" id="trash-icon"></i>
+                    </a>
+              {% endif %}
+  
+              <!-- Modal -->
+              <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar publicacion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    Desea eliminar esta publicacion?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <a class="btn btn-danger" href="{{ url_for('delete_post', post_id=photo.id)}}">Eliminar</a>
+                    </div>
                 </div>
-                <div class="modal-body">
-                Desea eliminar esta publicacion?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-danger" href="{{ url_for('delete_post', post_id=photo.id)}}">Eliminar</a>
-                </div>
+              </div>
             </div>
-          </div>
 
-
-         
-        </div>
-          
-          
-        </div>
+            </div>
+           
       {% endfor %}
+
       </div>
+
+      
     </div>
   </div>
+</div>
 
 
 

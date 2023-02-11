@@ -3,16 +3,15 @@
 
 {% block content %}
 
-
     {% for post in posts.items %}
-
+    
     <div class="container">
         <div class="row justify-content-center mb-4">
             <div class="col-md-6">           
                 <div class="polaroid mt-2">
                     <div class="row">
                         <img class="" src="{{ url_for('static', filename='UPLOAD_FOLDER/' + post.image)   }}" alt="Publicacion">
-                    </div>
+                    </div>   
                     <div class="row">
                         <div class="col">
                             <div class="mb-2">
@@ -93,9 +92,6 @@
    
 
 
-
-
-
 <!-- Boton para publicar   -->
 
 <form method="POST" action="{{ url_for('new_post') }}">      
@@ -104,7 +100,6 @@
         </button>
       </div>     
 </form>
-
 
 
 {% endblock content %}

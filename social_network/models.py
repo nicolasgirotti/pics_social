@@ -13,7 +13,7 @@ def load_user(user_id):
 
 # Tabla auxiliar
 class Follow(db.Model):
-    __tablename__ = 'follows'
+    
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                             primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'),
@@ -84,6 +84,15 @@ class User(db.Model, UserMixin):
             db.session.delete(f)
             return True
         
+    # Friends
+    
+    def friends(self):
+        friends = []
+        for follow in self.followed.all():
+            friends.append(follow.followed)
+        for follow in self.followers.all():
+            friends.append(follow.follower)
+        return friends
         
 
 class Post(db.Model):

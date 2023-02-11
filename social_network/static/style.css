@@ -48,14 +48,13 @@ img{
   box-shadow: 10px 5px 5px #212020;
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
-
+  border-radius: 5px;
 }
 
 .polaroid img {
   display: block;
   margin-left: auto;
-  margin-right: auto;
-  
+  margin-right: auto; 
 }
 
 
@@ -159,9 +158,9 @@ img{
 }
 
 .anchor:hover{
-  color: #1DA1F2;
+  color: #ffffff;
+  transform: scale(1.05);
 }
-
 
 .exit:hover{
   color:red;
@@ -424,7 +423,9 @@ hr{
 .username-settings{
   font-size: 2em;
   margin-left: 0.2em;
-  display: inline-block;
+  margin-top: 0.2em;
+  word-wrap: break-word;
+
 }
 
 .other-user-settings {
@@ -441,6 +442,7 @@ hr{
   transition: all 0.3s ease;
   font-size: 1.2em;
   margin-left: 0.5em;
+
 }
 
 #user-follow{
@@ -466,3 +468,55 @@ hr{
   overflow: hidden;
   margin-left: 0.2em;
 }
+
+
+.photo-profile-friends{
+  width: 100px;
+   height: 100px;
+   object-fit: cover;
+   border-radius: 50%
+}
+
+.user-friend{
+  text-align: center;
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+.user-friend a{
+  text-decoration: none;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+
+.profile-user{
+  margin: auto;
+  width: 25em;
+  height: 12em;
+  border-bottom: 1px solid black;
+  margin-bottom: 1em;  
+}
+
+
+
+.profile-user img{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  float: left;
+  border-radius: 5px;
+  margin: 1em 1em 1em 1em;
+}
+
+.polaroid-profile{
+  margin: auto;
+  background-color: white;
+  object-fit: cover;
+  box-shadow: 10px 5px 5px #212020;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  width: 20em;
+}
+
