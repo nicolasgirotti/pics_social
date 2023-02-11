@@ -153,8 +153,8 @@ def save_photo(form_picture):
 def new_post():
     form = NewPost()
     if form.validate_on_submit():
-        image = form.photo.data
-        image_path = save_photo(image)
+        image_path = save_photo(form.photo.data)
+        print(image_path)
         post = Post(content=form.content.data, image=image_path, author=current_user)
         db.session.add(post)
         db.session.commit()
