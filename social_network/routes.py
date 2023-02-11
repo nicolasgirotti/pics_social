@@ -151,7 +151,6 @@ def save_photo(form_picture):
 @app.route("/post", methods=['GET', 'POST'])
 @login_required
 def new_post():
-    
     form = NewPost()
     if form.validate_on_submit():
         image = form.photo.data
