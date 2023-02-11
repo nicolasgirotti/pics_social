@@ -11,8 +11,8 @@
                 <div class="polaroid mt-3">
                     <form method='POST' action="{{ url_for('new_post') }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
-                        <div class="black-photo">
-                            
+                        <div class="new-photo">
+                            <img src="{{ url_for('static', filename='profile_pics/' +  'new_post.jpg') }}" alt="Fotografa">
                         </div>
                         <div class="form-group">
                             {{ form.photo}}  

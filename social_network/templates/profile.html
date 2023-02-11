@@ -24,6 +24,9 @@
                 Dejar de seguir
             </a>   
         {% endif %}
+        <a class="user-settings" href="{{ url_for('friends', user=user.username) }}">
+          <i class="fa-solid fa-user-group"></i> Contactos
+        </a>
       </div>
     </div>
   </div>
@@ -76,6 +79,30 @@
 </div>
 
 
+
+
+<div class="container">
+  <div class='row justify-content-center text-center'>
+      <!-- Bucle que itera sobre las paginas-->
+      <div class="pagination">
+          {%  for page_num in photos.iter_pages(left_edge=1, right_edge=1, left_current=1,right_current=2) %}
+              <!-- Enlaces a otras paginas-->
+              {%  if page_num  %}
+                  <!--condicional adicional para darle estilo al link de la pagina actual-->
+                  {%  if photos.page == page_num  %}
+                      <a class="btn btn-info mb-4" href="{{ url_for('profile', page=page_num, username=user.username) }}">{{ page_num }}</a>
+                  {%  else %}
+                      <a class="btn btn-outline-info mb-4" href="{{ url_for('profile', page=page_num, username=user.username) }}">{{ page_num }}</a>
+                  {%  endif  %}
+              {%  else %}
+                  <!--Los valores NONE, los mostraremos como puntos suspensivos-->
+              ...
+              {%  endif %}
+          {%  endfor %}
+      
+      </div>
+  </div>
+</div>
 
 {% endblock content %}
 

@@ -300,8 +300,8 @@ def message(data):
     
     
     
-@app.route("/friends", methods=['GET', 'POST'])
-def friends():
-    user = current_user
+@app.route("/friends/<string:user>", methods=['GET', 'POST'])
+def friends(user):
+    user = User.query.filter_by(username=user).first()
     friends = user.friends()        
     return render_template('friends_list.html', friends=friends)

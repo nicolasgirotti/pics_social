@@ -2,9 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    var socket = io.connect('http://' + location.hostname + ':' + location.port);
+    //var socket = io.connect('http://' + location.hostname + ':' + location.port);
 
-    //var socket = io('https://pics.proyectocoder.com');
+    var socket = io('https://pics.proyectocoder.com');
    
 
     let room = 'Pics';
