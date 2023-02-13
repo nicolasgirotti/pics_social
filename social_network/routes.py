@@ -219,8 +219,8 @@ def reset_request():
         user = User.query.filter_by(email=form.email.data).first()
         try:
             send_reset_email(user)
-        except:
-            pass
+        except Exception as e:
+            print(f'Error al enviar mail {e}')
         flash('Se ha enviado un correo con instrucciones para reestablecer su contraseña', 'info')
         return redirect(url_for('login'))
     return render_template('reset_request.html', title='Solicitar cambio de contraseña',form=form)
