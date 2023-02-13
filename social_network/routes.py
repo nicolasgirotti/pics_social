@@ -198,7 +198,7 @@ def delete_post(post_id):
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Solicitud de reestablecimiento de contraseña', 
-                  sender='readyplayer.parziv@gmail.com', 
+                  sender='picsproyectocoder@gmail.com', 
                   recipients=[user.email])
     msg.body = f'''Para reestablecer tu contraseña, visita el siguiente link: 
 {url_for('reset_password', token=token, _external=True)}
