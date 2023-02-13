@@ -90,8 +90,8 @@ class User(db.Model, UserMixin):
         friends = []
         for follow in self.followed.all():
             friends.append(follow.followed)
-        for follow in self.followers.all():
-            friends.append(follow.follower)
+        """for follow in self.followers.all():
+            friends.append(follow.follower)"""
         return friends
         
 

@@ -11,7 +11,7 @@
         <p class="username-settings">{{user.username|title }}</p>
         {% if current_user.id == user.id %}
             <a class="user-settings" href="{{ url_for('account') }}">
-              <i class="fa-solid fa-gear"></i> Ajustes de cuenta
+              <i class="fa-solid fa-gear"></i> Ajustes
             </a>
             <!-- Opciones para seguir a usuario -->
         {% elif not current_user.is_following(user)  %}
@@ -24,7 +24,7 @@
                 Dejar de seguir
             </a>   
         {% endif %}
-        <a class="user-settings" href="{{ url_for('friends', user=user.username) }}">
+        <a class="user-settings" href="{{ url_for('friends', user_id=user.id) }}">
           <i class="fa-solid fa-user-group"></i> Contactos
         </a>
       </div>

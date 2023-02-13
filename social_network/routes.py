@@ -129,7 +129,7 @@ def profile(username):
         .paginate(page=page, per_page=5)
 
     
-    return render_template('profile.html', photos=photos, user=user)
+    return render_template('profile.html', photos=photos, user=user, title='Cuenta')
 
 
 
@@ -317,8 +317,13 @@ def message(data):
     
     
     
-@app.route("/friends/<string:user>", methods=['GET', 'POST'])
-def friends(user):
-    user = User.query.filter_by(username=user).first()
-    friends = user.friends()        
-    return render_template('friends_list.html', friends=friends)
+@app.route("/friends/<int:user_id>", methods=['GET', 'POST'])
+def friends(user_id):
+    list_friends = []
+    user = User.query.get(user_id)
+    friends = user.friends()  
+    for i in friends:
+        if i not in list_friends:
+            list_friends.append(i)
+      
+    return render_template('friends_list.html', list_friends=list_friends)
