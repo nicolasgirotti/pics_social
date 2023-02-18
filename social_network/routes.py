@@ -201,7 +201,7 @@ def send_reset_email(user):
                   sender='picsproyectocoder@gmail.com', 
                   recipients=[user.email])
     msg.body = f'''Para reestablecer tu contraseña, visita el siguiente link: 
-{url_for('reset_password', token=token, _external=True)}
+{url_for('reset_password', _external=True,token=token,_scheme='https' )}
 
 Si usted no realizo esta solicitud, simplemente ignore este email y no habra cambios en su cuenta.
 
