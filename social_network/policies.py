@@ -8,6 +8,7 @@ class CSPMiddleware:
     def __call__(self, environ, start_response):
         def custom_start_response(status, headers, exc_info=None):
             headers.append(('Content-Security-Policy', 'default-src \'self\''))
+            print("CSPM en ejecucion..")
             return start_response(status, headers, exc_info)
 
         return self.app(environ, custom_start_response)
@@ -18,6 +19,7 @@ class XFOMiddleware:
 
     def __call__(self, environ, start_response):
         def custom_start_response(status, headers, exc_info=None):
+            print("XFO en ejecucion..")
             headers.append(('X-Frame-Options', 'SAMEORIGIN'))
             return start_response(status, headers, exc_info)
 
@@ -29,6 +31,7 @@ class HSTSMiddleware:
 
     def __call__(self, environ, start_response):
         def custom_start_response(status, headers, exc_info=None):
+            print("Hsts en ejecucion..")
             headers.append(('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload'))
             return start_response(status, headers, exc_info)
 
