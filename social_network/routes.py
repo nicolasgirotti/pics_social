@@ -327,3 +327,9 @@ def friends(user_id):
             list_friends.append(i)
       
     return render_template('friends_list.html', list_friends=list_friends)
+
+
+
+
+
+
